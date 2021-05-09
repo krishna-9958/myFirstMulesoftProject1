@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="d17ed64e-c552-4fad-98c7-0e8360f57be0" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="practiceFlow" doc:id="6d9289c5-7cc4-4100-9038-68e2a73049cb" >
+		<http:listener doc:name="Listener" doc:id="150c278f-ad0c-43c8-a09d-1e0788a9088c" config-ref="HTTP_Listener_config" path="/on"/>
+		<ee:transform doc:name="Transform Message" doc:id="07151b61-d90c-4d61-8182-9f457a16441f" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+
+---
+{
+	status: "success"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<set-variable value="#[payload]" doc:name="Set Variable" doc:id="f72fccdf-7749-4712-b723-a3e8638197cc" variableName="p"/>
+		<logger level="INFO" doc:name="Logger" doc:id="1344f184-a240-415e-80e5-72d1b9f5cfb7" message="#[vars.p]"/>
+	</flow>
+</mule>
